@@ -16,9 +16,9 @@ import ray
 
 @ray.remote
 class ML_NE:
-    def __init__(self, generations, num_agents, top_limit):
+    def __init__(self, generations, num_agents, top_limit, step=200):
         self.cartpole_version = "CartPole-v1"
-
+        self.step = step
         self.game_actions = 2  # 2 actions possible: left or right
 
         # disable gradients as we will not use them
@@ -92,7 +92,7 @@ class ML_NE:
             r = 0
             s = 0
 
-            for _ in range(250):
+            for _ in range(self.step):
                 inp = torch.tensor(observation).type('torch.FloatTensor').view(1, -1)
                 output_probabilities = agent(inp).detach().numpy()[0]
                 action = np.random.choice(range(self.game_actions), 1, p=output_probabilities).item()
@@ -238,7 +238,7 @@ class ML_NE:
             observation = env.reset()
             last_observation = observation
             r = 0
-            for _ in range(250):
+            for _ in range(self.step):
                 env.render()
                 inp = torch.tensor(observation).type('torch.FloatTensor').view(1, -1)
                 output_probabilities = self.agents[-1](inp).detach().numpy()[0]

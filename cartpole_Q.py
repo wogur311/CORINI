@@ -11,9 +11,9 @@ import ray
 
 @ray.remote
 class ML_Q:
-    def __init__(self, sub_project_name, episode_num, goal_step=200):
+    def __init__(self, sub_project_name, episode_num, step=200):
         self.episode_num = episode_num
-        self.goal_step = goal_step
+        self.step = step
         self.env = gym.make(sub_project_name)
         self.n_bins = (6, 12)
         self.lower_bounds = [self.env.observation_space.low[2], -math.radians(50)]
@@ -55,7 +55,7 @@ class ML_Q:
             # Siscretize state into buckets
             current_state, done = self.discretizer(*self.env.reset()), False
 
-            for i in range(self.goal_step):
+            for i in range(self.step):
 
                 # policy action
                 action = self.policy(current_state)  # exploit
@@ -90,7 +90,7 @@ class ML_Q:
         for i in range(iter):
             current_state, done = self.discretizer(*self.env.reset()), False
 
-            for j in range(self.goal_step):
+            for j in range(self.step):
                 action = self.policy(current_state)
                 obs, reward, done, _ = self.env.step(action)
                 current_state = self.discretizer(*obs)
