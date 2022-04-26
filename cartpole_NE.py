@@ -17,6 +17,8 @@ import ray
 @ray.remote
 class ML_NE:
     def __init__(self, generations, num_agents, top_limit):
+        self.cartpole_version = "CartPole-v1"
+
         self.game_actions = 2  # 2 actions possible: left or right
 
         # disable gradients as we will not use them
@@ -80,7 +82,7 @@ class ML_NE:
 
     def run_agents(self, agents):
         reward_agents = []
-        env = gym.make("CartPole-v0")
+        env = gym.make(self.cartpole_version)
 
         for agent in agents:
             agent.eval()
@@ -230,7 +232,7 @@ class ML_NE:
 
     def play_agent(self):
         try:  # try and exception block because, render hangs if an erorr occurs, we must do env.close to continue working
-            env = gym.make("CartPole-v0")
+            env = gym.make(self.cartpole_version)
 
             # env_record = Monitor(env, './video', force=True)
             observation = env.reset()
