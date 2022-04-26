@@ -1,6 +1,6 @@
 # CORINI
 
-# Requirements
+## Requirements
 * PyTorch
 * Gym
 * Numpy
