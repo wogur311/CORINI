@@ -1,22 +1,17 @@
 import gym
 import numpy as np
 import torch
-import matplotlib.pyplot as plt
-import time
 
 import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
 
-import torch.optim as optim
-
-import math
 import copy
 import ray
 
-@ray.remote
+#@ray.remote
 class ML_NE:
-    def __init__(self, generations, num_agents, top_limit):
+    def __init__(self, generations, num_agents, top_limit, cartpole_version='CartPole-v1', step=200):
+        self.cartpole_version = cartpole_version
+        self.step = step
         self.game_actions = 2  # 2 actions possible: left or right
 
         # disable gradients as we will not use them
@@ -38,6 +33,7 @@ class ML_NE:
         self.results = []
 
     class CartPoleAI(nn.Module):
+        '''The brain of the agent'''
         def __init__(self):
             super().__init__()
             self.fc = nn.Sequential(
@@ -80,31 +76,27 @@ class ML_NE:
 
     def run_agents(self, agents):
         reward_agents = []
-        env = gym.make("CartPole-v0")
+        env = gym.make(self.cartpole_version)
 
         for agent in agents:
             agent.eval()
 
             observation = env.reset()
 
-            r = 0
-            s = 0
+            reward = 0
 
-            for _ in range(250):
+            for _ in range(self.step):
                 inp = torch.tensor(observation).type('torch.FloatTensor').view(1, -1)
                 output_probabilities = agent(inp).detach().numpy()[0]
                 action = np.random.choice(range(self.game_actions), 1, p=output_probabilities).item()
                 new_observation, reward, done, info = env.step(action)
-                r = r + reward
-
-                s = s + 1
+                reward = reward + reward
                 observation = new_observation
 
-                if (done):
+                if done:
                     break
 
-            reward_agents.append(r)
-            # reward_agents.append(s)
+            reward_agents.append(reward)
 
         return reward_agents
 
@@ -198,7 +190,7 @@ class ML_NE:
         """Compute softmax values for each sets of scores in x."""
         return np.exp(x) / np.sum(np.exp(x), axis=0)
 
-    def test_name_run(self):
+    def model_train(self):
         self.agents = self.return_random_agents(self.num_agents)
         for generation in range(self.generations):
 
@@ -230,14 +222,14 @@ class ML_NE:
 
     def play_agent(self):
         try:  # try and exception block because, render hangs if an erorr occurs, we must do env.close to continue working
-            env = gym.make("CartPole-v0")
+            env = gym.make(self.cartpole_version)
 
             # env_record = Monitor(env, './video', force=True)
             observation = env.reset()
             last_observation = observation
             r = 0
-            for _ in range(250):
-                env.render()
+            for _ in range(self.step):
+                #env.render()
                 inp = torch.tensor(observation).type('torch.FloatTensor').view(1, -1)
                 output_probabilities = self.agents[-1](inp).detach().numpy()[0]
                 action = np.random.choice(range(self.game_actions), 1, p=output_probabilities).item()
