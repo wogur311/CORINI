@@ -1,0 +1,24 @@
+.whole_page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+#title {
+    text-align: center;
+}
+.to-diff-buttons-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.to-diff-page-button {
+    text-decoration: none;
+    color: #0000C0;
+    text-align: center;
+    border-radius: 10px;
+    margin: 5px;
+}
