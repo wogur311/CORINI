@@ -1,10 +1,11 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Model Tester - AI MODEL TESTER</title>
-
-</head>
+     <link rel="stylesheet" href="{% static 'css/model-test.css' %}">
+</head>	
 <body>
     <div class="model-page">
         <div class="menu">
@@ -23,7 +24,7 @@
                     </select>
 
                     <!-- model type에 따라 달라지도록 -->
-                    {% include './model_type_Q_forms.html' %}
+                    {% include 'main/model_type_Q_forms.html' %}
 
                 </div>
 
@@ -37,7 +38,7 @@
                     </select>
 
                     <!-- model type에 따라 달라지도록 -->
-                    {% include './model_type_NE_forms.html' %}
+                    {% include 'main/model_type_NE_forms.html' %}
 
                 </div>
         </div>
