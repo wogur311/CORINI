@@ -20,4 +20,4 @@ def parsing(request):
 
 @method_decorator(csrf_exempt)
 def index(request):
-    return render(request, "main/test.html")
+    return render(request, "main/model-test.html")
