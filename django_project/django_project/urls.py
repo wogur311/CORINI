@@ -19,5 +19,7 @@ from main import views as main_views
 
 urlpatterns = [
     path('', main_views.index, name="index"),
+    path('main/model-test', main_views.model_test_view, name="model_test_view"),
+    path('main/intro', main_views.intro_view, name='intro_view'),
     path('admin/', admin.site.urls),
 ]
