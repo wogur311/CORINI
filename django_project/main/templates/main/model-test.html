@@ -24,7 +24,11 @@
                     </select>
 
                     <!-- model type에 따라 달라지도록 -->
-                    {% include 'main/model_type_Q_forms.html' %}
+                    {% if model1_type == "Q-learning" %}
+                        {% include 'main/model_type_Q_forms.html' %}
+                    {% else %}
+                        {% include 'main/model_type_NE_forms.html' %}
+                    {% endif %}
 
                 </div>
 
@@ -38,7 +42,11 @@
                     </select>
 
                     <!-- model type에 따라 달라지도록 -->
-                    {% include 'main/model_type_NE_forms.html' %}
+                    {% if model1_type == "Q-learning" %}
+                        {% include 'main/model_type_Q_forms.html' %}
+                    {% else %}
+                        {% include 'main/model_type_NE_forms.html' %}
+                    {% endif %}
 
                 </div>
         </div>
