@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Model Tester - AI MODEL TESTER</title>
+     <link rel="stylesheet" href="{% static 'css/model-test.css' %}">
+</head>
+<body>
+    <div class="model-page">
+        <div class="menu">
+            <h2>AI MODEL TESTER(DEMO)</h2>
+        </div>
+
+        <form name="models_settings_info" method="post">
+            <div class="models">
+                <!-- 1st model -->
+                <div class="model-box" id="model-1">
+                    <label>Model settings</label>
+
+                    <select name="model1_type">
+                        <option>Q-learning</option>
+                        <option>Neuroevolution</option>
+                    </select>
+
+                </div>
+
+                <!-- 2nd model -->
+                <div class="model-box" id="model-2">
+                    <label>Model settings</label>
+
+                    <select name="model2_type">
+                        <option>Neuroevolution</option>
+                        <option>Q-learning</option>
+                    </select>
+
+                </div>
+        </div>
+            <input type="submit" value="NEXT">
+        </form>
+
+    </div>
+
+</body>
+</html>
