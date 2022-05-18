@@ -5,10 +5,6 @@ from django.utils.decorators import method_decorator
 
 @method_decorator(csrf_exempt)
 def index(request):
-    if 'start' in request.POST:
-        return redirect('model_test_view')
-    if 'about' in request.POST:
-        return redirect('intro_view')
     return render(request, "main/test.html")
 
 @method_decorator(csrf_exempt)
