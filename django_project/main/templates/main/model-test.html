@@ -17,38 +17,28 @@
                 <!-- 1st model -->
                 <div class="model-box" id="model-1">
                     <label>Model settings</label>
-
-                    <select name="model1_type">
-                        <option>Q-learning</option>
-                        <option>Neuroevolution</option>
-                    </select>
-
-                    <!-- model type에 따라 달라지도록 -->
-                    {% if model1_type == "Q-learning" %}
-                        {% include 'main/model_type_Q_forms.html' %}
-                    {% else %}
-                        {% include 'main/model_type_NE_forms.html' %}
+                    <h3> {{model1_type}} </h3>
+                    {% if model1_type %}
+                        {% if model1_type == 'Q-learning' %}
+                            {% include "main/Q-learning.html" %}
+                        {% else %}
+                            {% include "main/NE.html" %}
+                        {% endif %}
                     {% endif %}
-
                 </div>
 
-                <!-- 2nd model -->
                 <div class="model-box" id="model-2">
                     <label>Model settings</label>
-
-                    <select name="model2_type">
-                        <option>Neuroevolution</option>
-                        <option>Q-learning</option>
-                    </select>
-
-                    <!-- model type에 따라 달라지도록 -->
-                    {% if model1_type == "Q-learning" %}
-                        {% include 'main/model_type_Q_forms.html' %}
-                    {% else %}
-                        {% include 'main/model_type_NE_forms.html' %}
+                    <h3> {{model2_type}} </h3>
+                    {% if model2_type %}
+                        {% if model2_type == 'Q-learning' %}
+                            {% include "main/Q-learning.html" %}
+                        {% else %}
+                            {% include "main/NE.html" %}
+                        {% endif %}
                     {% endif %}
-
                 </div>
+
         </div>
             <input type="submit" value="Train">
         </form>
