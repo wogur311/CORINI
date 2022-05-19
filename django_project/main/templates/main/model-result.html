@@ -5,43 +5,46 @@
     <meta charset="UTF-8">
     <title>Model Tester - AI MODEL TESTER</title>
      <link rel="stylesheet" href="{% static 'css/model-test.css' %}">
-</head>	
+</head>
 <body>
     <div class="model-page">
         <div class="menu">
             <h2>AI MODEL TESTER(DEMO)</h2>
         </div>
-
-        <form name="models_settings_info" method="post">
             <div class="models">
                 <!-- 1st model -->
                 <div class="model-box" id="model-1">
                     <label>Model settings</label>
-                    <h3> {{model1_type}} </h3>
                     {% if model1_type %}
-                        {% if model1_type == 'Q-learning' %}
-                            {% include "main/Q-learning.html" %}
+                    <h3>{{ model1_type }}</h3>
+                        {% if 'Q-learning' in model1_type %}
+                            {% include "main/Q-learning-result-page.html" %}
+                            <p>Q-learning</p>
                         {% else %}
-                            {% include "main/Neuroevolution.html" %}
+                            {% include "main/Neuroevolution-result-page.html" %}
+                            <p>NE</p>
                         {% endif %}
                     {% endif %}
+
                 </div>
 
                 <div class="model-box" id="model-2">
                     <label>Model settings</label>
-                    <h3> {{model2_type}} </h3>
                     {% if model2_type %}
-                        {% if model2_type == 'Q-learning' %}
-                            {% include "main/Q-learning.html" %}
+                    <h3>{{ model2_type }}</h3>
+                        {% if 'Q-learning' in model2_type %}
+                            {% include "main/Q-learning-result-page.html" %}
+                            <p>Q-learning</p>
                         {% else %}
-                            {% include "main/Neuroevolution.html" %}
+                            {% include "main/Neuroevolution-result-page.html" %}
+                            <p>NE</p>
                         {% endif %}
                     {% endif %}
+
                 </div>
 
+
         </div>
-            <input type="submit" value="Train">
-        </form>
 
     </div>
 
