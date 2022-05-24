@@ -5,9 +5,7 @@ from sklearn.preprocessing import KBinsDiscretizer
 import numpy as np
 import time, math, random
 import gym
-import ray
 
-#@ray.remote
 class ML_Q:
     def __init__(self, episode_num, learning_rate, cartpole_version='CartPole-v1', step=200):
         self.episode_num = episode_num # 사용자로부터 받은 episode 수
