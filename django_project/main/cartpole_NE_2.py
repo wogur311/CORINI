@@ -219,13 +219,13 @@ class ML_NE_2:
     def get_train_rewards(self) -> list:
         return self.rewards_of_generation
 
-    def is_done(self):
+    def is_done(self) -> bool:
         """
         Check if the Train is over so the end time has saved successfully
-        :return: 0 -> end time not saved,
-                 1 -> end time saved
+        :return: False -> end time not saved,
+                 True -> end time saved
         """
         if self.end_time is None: # 클래스 생성시 None으로 저장했기때문에 이렇게 설정함
-            return 0
+            return False
         else:
-            return 1
+            return True

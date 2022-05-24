@@ -3,7 +3,9 @@ from cartpole_NE_2 import *
 
 # Q-learning
 Q_model = ML_Q(1000, 0.7) # 모델 생성
+print(Q_model.is_done())
 Q_model.model_train() # 훈련
+print(Q_model.is_done())
 
 print(Q_model.get_train_time()) # 훈련하는 데 걸린 시간
 print(Q_model.get_train_rewards()) # 훈련한 에피소드 마다의 리워드
