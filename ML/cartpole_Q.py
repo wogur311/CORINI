@@ -9,8 +9,13 @@ import ray
 
 #@ray.remote
 class ML_Q:
-    def __init__(self, episode_num, cartpole_version='CartPole-v1', step=200):
-        self.episode_num = episode_num
+    def __init__(self, episode_num, learning_rate, cartpole_version='CartPole-v1', step=200):
+        self.episode_num = episode_num # 사용자로부터 받은 episode 수
+        self.learning_rate_custom = learning_rate # 사용자로부터 받은 laerning rate
+        self.start_time = None # 첫번째 에피소드 시작 시간
+        self.end_time = None # 마지막 에피소드 종료 시간
+
+        self.rewards_of_episodes = []
         self.curr_episode = 0
         self.step = step
         self.env = gym.make(cartpole_version)
@@ -49,7 +54,9 @@ class ML_Q:
         return max(min_rate, min(1, 1.0 - math.log10((n + 1) / 25)))
 
     def model_train(self):
+        self.start_time = time.time()
         for curr_episode in range(self.episode_num):
+            rewards = 0 # 매 에피소드마다 저장할 reward 총합
             self.curr_episode = curr_episode
             # Siscretize state into buckets
             current_state, done = self.discretizer(*self.env.reset()), False
@@ -75,14 +82,17 @@ class ML_Q:
                 self.Q_table[current_state][action] = (1 - lr) * old_value + lr * learnt_value
 
                 current_state = new_state
-
+                rewards += reward
                 # Render the cartpole environment
                 # self.env.render()
 
                 if done==True:
                     break
 
-        # self.env.close()
+            self.rewards_of_episodes.append(rewards) # 매 에피소드마다 저장
+
+            # self.env.close()
+        self.end_time = time.time()
         return 'done'
 
     def play_agent(self, iter):
@@ -104,3 +114,12 @@ class ML_Q:
 
     def get_Q_table(self):
         return self.Q_table
+
+    def get_train_time(self) -> str:
+        """
+        :return: whole training time (ms)
+        """
+        return str(self.end_time - self.start_time)
+
+    def get_train_rewards(self) -> list:
+        return self.rewards_of_episodes
