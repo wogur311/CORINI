@@ -4,16 +4,19 @@ import torch
 from torch import nn
 import torch.nn.functional as F
 import copy
-from time import time
-
+import time
 
 class ML_NE_2:
     def __init__(self, generations, pop_size, top_limit, cartpole_version='CartPole-v1', max_step_per_epi=200):
         self.cartpole_version = cartpole_version
         self.max_step_per_epi = max_step_per_epi
         self.game_actions = 2  # 2 actions possible: left or right
-        self.agent_eval_num = 15 # 인자로 받아서 커스텀 할 수 있을 듯
+        self.agent_eval_num = 1 # 인자로 받아서 커스텀 할 수 있을 듯
         self.mutation_power = 0.02 # 인자로 받아서 커스텀 할 수 있을 듯
+
+        self.start_time = None # 훈련 시작 시간
+        self.end_time = None # 훈련 종료 시간
+        self.rewards_of_generation = [] # 제너레이션마다 엘리트 집단의 평균을 저장
 
         torch.set_grad_enabled(False)
 
@@ -48,7 +51,7 @@ class ML_NE_2:
 
     # 기존의 인자인 'max_episode_length'는 최대 스텝은 기본으로 200으로 설정할 것이므로 삭제함.
     # 필요할 경우엔 ML_NE2의 self.step 값을 사용.
-    def evaluate_agent(self, agent, episodes=15, max_step_per_epi=200):
+    def evaluate_agent(self, agent, episodes=1, max_step_per_epi=200):
         '''Run an agent for a given number episodes and get the rewards'''
         # 한 에이전트 당 한 번의 시뮬레이션을 하는 게 아니라 인자로 받은 episodes수만큼 함.
         # 그 평균을 가지고 한 에이전트의 성능 평가가 이루어짐
@@ -79,7 +82,7 @@ class ML_NE_2:
         return np.array(total_rewards).mean()
 
     # 인구 전체에 대하여 각 agent들의 성능을 평가 (위에서 정의한 self.evaluate_agent 사용)
-    def evaluate_population(self, population, episodes=15, max_step_per_epi=200):
+    def evaluate_population(self, population, episodes=1, max_step_per_epi=200):
         '''Evaluate the population'''
         pop_fitness = []
         for agent in population:
@@ -121,7 +124,6 @@ class ML_NE_2:
         population = self.initialize_population(pop_size)
         global_best = {}
 
-        t1 = time()
         for g in range(generations):
             # Evaluate the population
             pop_fitness = self.evaluate_population(population, episodes, max_step_per_epi)
@@ -135,6 +137,11 @@ class ML_NE_2:
             best_agent = population[topK_idx[0]]
             best_reward = pop_fitness[topK_idx[0]]
 
+            # get elite agents mean rewards
+            mean_rewards = 0
+            for idx in range(topK):
+                mean_rewards += pop_fitness[topK_idx[idx]]
+            self.rewards_of_generation.append(mean_rewards/topK)  # 매 세대마다 제일 잘한 agent의 평균값 저장
             # Check with global best
             if g == 0:
                 global_best['reward'] = best_reward
@@ -144,10 +151,10 @@ class ML_NE_2:
                     global_best['reward'] = best_reward
                     global_best['agent'] = best_agent
 
-            print('Generation', g)
-            print('Mean Reward of Population', mean_pop_reward)
-            print('Best Agent Reward (mean)', best_reward)
-            print('Global Best Reward (mean)', global_best['reward'], '\n')
+            # print('Generation', g)
+            # print('Mean Reward of Population', mean_pop_reward)
+            # print('Best Agent Reward (mean)', best_reward)
+            # print('Global Best Reward (mean)', global_best['reward'], '\n')
 
             # Mutate and Repopulate
             new_population = self.repopulate(topK_agents, pop_size, mutation_power)
@@ -160,12 +167,14 @@ class ML_NE_2:
 
     # main train func
     def model_train(self):
+        self.start_time = time.time()
         self.evolve(generations=self.generations,
                 pop_size=self.population_size,
                 topK=self.top_limit,
                 episodes=self.agent_eval_num,
                 max_step_per_epi=self.max_step_per_epi,
                 mutation_power=self.mutation_power)
+        self.end_time = time.time()
 
     # ## Test the Trained Agent
     def play_agent(self, agent, episodes, max_step_per_epi, render=False):
@@ -200,3 +209,12 @@ class ML_NE_2:
     def test(self, itr):
         self.play_agent(self.TRAINED_AGENT['agent'], episodes=itr, max_step_per_epi=self.max_step_per_epi, render=True)
         torch.save(self.TRAINED_AGENT['agent'].state_dict(), 'model-200.pth')
+
+    def get_train_time(self) -> str:
+        """
+        :return: whole training time (ms)
+        """
+        return str(self.end_time - self.start_time)
+
+    def get_train_rewards(self) -> list:
+        return self.rewards_of_generation
