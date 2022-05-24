@@ -11,7 +11,7 @@ class ML_NE_2:
         self.cartpole_version = cartpole_version
         self.max_step_per_epi = max_step_per_epi
         self.game_actions = 2  # 2 actions possible: left or right
-        self.agent_eval_num = 15 # 인자로 받아서 커스텀 할 수 있을 듯
+        self.agent_eval_num = 1 # 인자로 받아서 커스텀 할 수 있을 듯
         self.mutation_power = 0.02 # 인자로 받아서 커스텀 할 수 있을 듯
 
         self.start_time = None # 훈련 시작 시간
@@ -51,7 +51,7 @@ class ML_NE_2:
 
     # 기존의 인자인 'max_episode_length'는 최대 스텝은 기본으로 200으로 설정할 것이므로 삭제함.
     # 필요할 경우엔 ML_NE2의 self.step 값을 사용.
-    def evaluate_agent(self, agent, episodes=15, max_step_per_epi=200):
+    def evaluate_agent(self, agent, episodes=1, max_step_per_epi=200):
         '''Run an agent for a given number episodes and get the rewards'''
         # 한 에이전트 당 한 번의 시뮬레이션을 하는 게 아니라 인자로 받은 episodes수만큼 함.
         # 그 평균을 가지고 한 에이전트의 성능 평가가 이루어짐
@@ -82,7 +82,7 @@ class ML_NE_2:
         return np.array(total_rewards).mean()
 
     # 인구 전체에 대하여 각 agent들의 성능을 평가 (위에서 정의한 self.evaluate_agent 사용)
-    def evaluate_population(self, population, episodes=15, max_step_per_epi=200):
+    def evaluate_population(self, population, episodes=1, max_step_per_epi=200):
         '''Evaluate the population'''
         pop_fitness = []
         for agent in population:
@@ -137,6 +137,11 @@ class ML_NE_2:
             best_agent = population[topK_idx[0]]
             best_reward = pop_fitness[topK_idx[0]]
 
+            # get elite agents mean rewards
+            mean_rewards = 0
+            for idx in range(topK):
+                mean_rewards += pop_fitness[topK_idx[idx]]
+            self.rewards_of_generation.append(mean_rewards/topK)  # 매 세대마다 제일 잘한 agent의 평균값 저장
             # Check with global best
             if g == 0:
                 global_best['reward'] = best_reward
@@ -150,8 +155,6 @@ class ML_NE_2:
             # print('Mean Reward of Population', mean_pop_reward)
             # print('Best Agent Reward (mean)', best_reward)
             # print('Global Best Reward (mean)', global_best['reward'], '\n')
-
-            self.rewards_of_generation.append(best_reward) # 매 세대마다 제일 잘한 agent의 평균값 저장
 
             # Mutate and Repopulate
             new_population = self.repopulate(topK_agents, pop_size, mutation_power)
