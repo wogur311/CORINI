@@ -71,7 +71,8 @@ def model_result_view(request): # 모델 선택 후 여기에서 머신러닝 �
 
     model1.model_train()
     model2.model_train()
-
+    print("model1 time :", model1.get_train_time())
+    print("model2 time :", model2.get_train_time())
     return render(request, "main/model-result.html", model_selected)
 
 def intro_view(request): # 시작 화면에서 'about'을 누를 경우 넘어가는 화면. 우리 프로젝트, 팀 정보에 대해서 간략히 적어놓으면 좋을 듯함.
