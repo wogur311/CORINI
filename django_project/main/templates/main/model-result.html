@@ -18,7 +18,7 @@
                     {% if model1_type %}
                     <h3>{{ model1_type }}</h3>
                         {% if 'Q-learning' in model1_type %}
-                            {% include "main/Q-learning-result-page.html" %}
+                            {% include "main/index.html" %}
                         {% else %}
                             {% include "main/Neuroevolution-result-page.html" %}
                         {% endif %}
@@ -33,7 +33,7 @@
                         {% if 'Q-learning' in model2_type %}
                             {% include "main/Q-learning-result-page.html" %}
                         {% else %}
-                            {% include "main/Neuroevolution-result-page.html" %}
+                            {% include "main/index.html" %}
                         {% endif %}
                     {% endif %}
 
