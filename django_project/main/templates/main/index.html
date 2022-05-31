@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- 1. static 사용 -->
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- 2. 사이트 html 하단 script 태그 위치 -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    
+    <!-- 3. css 속성 가져오기 -->
+    <link rel="stylesheet" href="{% static 'css/model-test.css' %}">
+    
+</head>
+<body>
+	<!-- 4. 사이트 html 하단 figure 태그 -->
+	<figure class="highcharts-figure">
+      <div id="container"></div>
+      <p class="highcharts-description">
+
+      </p>
+    </figure>
+    
+    <!-- 5. <script src="{% static 'chart/js/line.js' %}" ></script> -->
+    <!-- 6. script -->
+    <script>
+      Highcharts.chart('container', {
+        chart: {
+          type: 'line'
+        },
+        title: {
+          text: 'AI MODEL TESTER'
+        },
+
+        xAxis: {
+          categories: ['10s', '20s', '30s', '40s', '50s', '60s',
+            '70s', '80s', '90s', '100s', '110s', '120s', '130s', '140s', '150s', '160s']
+        },
+        yAxis: {
+          title: {
+            text: 'REWARD'
+          },
+          labels: {
+            formatter: function () {
+              return this.value ;
+            }
+          }
+        },
+        tooltip: {
+          crosshairs: true,
+          shared: true
+        },
+        plotOptions: {
+          spline: {
+            marker: {
+              radius: 4,
+              lineColor: '#666666',
+              lineWidth: 1
+            }
+          }
+        },
+        series: [{
+          name: 'Q-learning',
+          marker: {
+            symbol: 'square'
+          },
+          data: [27.0, 22.0, 32.0, 18.2, 50.0, 15.5, 94.0, 72.0, 156.0, 190.0, 133.0, 158.0,197.0,19.0,200.0,200.0]
+
+        }, {
+          name: 'NE',
+          marker: {
+            symbol: 'diamond'
+          },
+          data: [
+            39.43, 46.0, 80.35, 173.0, 199.25, 200.0 , 200.0, 200.0, 200.0, 200.0, 200.0, 200.0, 200.0,200.0,200.0,200.0]
+        }]
+      });
+    </script>
+</body>
+</html>
