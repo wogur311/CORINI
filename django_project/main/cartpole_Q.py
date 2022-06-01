@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Tuple
 
 from sklearn.preprocessing import KBinsDiscretizer
-import numpy as np
+import numpy
 import time, math, random
 import gym
 
@@ -20,7 +20,7 @@ class ML_Q:
         self.n_bins = (6, 12)
         self.lower_bounds = [self.env.observation_space.low[2], -math.radians(50)]
         self.upper_bounds = [self.env.observation_space.high[2], math.radians(50)]
-        self.Q_table = np.zeros(self.n_bins + (self.env.action_space.n,))
+        self.Q_table = numpy.zeros(self.n_bins + (self.env.action_space.n,))
 
     def discretizer(self, _, __, angle, pole_velocity) -> Tuple[int, ...]:
         """Convert continues state intro a discrete state"""
@@ -32,11 +32,11 @@ class ML_Q:
 
     def policy(self, state: tuple):
         """Choosing action based on epsilon-greedy policy"""
-        return np.argmax(self.Q_table[state])
+        return numpy.argmax(self.Q_table[state])
 
     def new_Q_value(self, reward: float, new_state: tuple, discount_factor=1) -> float:
         """Temperal diffrence for updating Q-value of state-action pair"""
-        future_optimal_value = np.max(self.Q_table[new_state])  # 새로운 상태에서 가장 큰 리워드
+        future_optimal_value = numpy.max(self.Q_table[new_state])  # 새로운 상태에서 가장 큰 리워드
         learned_value = reward + discount_factor * future_optimal_value
         return learned_value
 
@@ -64,7 +64,7 @@ class ML_Q:
                 # policy action
                 action = self.policy(current_state)  # exploit
 
-                if np.random.random() < self.exploration_rate(curr_episode):  # 설정한 탐험 확률에 해당될 경우, 탐험한다.
+                if numpy.random.random() < self.exploration_rate(curr_episode):  # 설정한 탐험 확률에 해당될 경우, 탐험한다.
                     action = self.env.action_space.sample()  # explore
 
                 # increment enviroment
