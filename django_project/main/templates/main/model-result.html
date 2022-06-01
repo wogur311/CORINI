@@ -4,17 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Model Tester - AI MODEL TESTER</title>
-     <link rel="stylesheet" href="{% static 'css/model-test.css' %}">
+    <link rel="stylesheet" href="{% static 'css/model-test.css' %}">
 </head>
 <body>
     <div class="model-page">
         <div class="menu">
-            <h2>AI MODEL TESTER(DEMO)</h2>
+            <h2>AI MODEL TESTER</h2>
         </div>
             <div class="models">
                 <!-- 1st model -->
                 <div class="model-box" id="model-1">
-                    <label>Model settings</label>
                     {% if model1_type %}
                     <h3>{{ model1_type }}</h3>
                         {% if 'Q-learning' in model1_type %}
@@ -27,7 +26,6 @@
                 </div>
 
                 <div class="model-box" id="model-2">
-                    <label>Model settings</label>
                     {% if model2_type %}
                     <h3>{{ model2_type }}</h3>
                         {% if 'Q-learning' in model2_type %}
@@ -39,6 +37,7 @@
 
                 </div>
 
+                {% include "main/index.html" %}
 
         </div>
 

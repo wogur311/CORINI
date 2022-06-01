@@ -63,18 +63,19 @@ def model_result_view(request): # 모델 선택 후 여기에서 머신러닝 �
         episode = int(args['q_number_of_episode'])
         learning_rate = float(args['q_learning_rate'])
         model2 = ML_Q(episode, learning_rate)
+
     else:
         generation = int(args['ne_generation'])
         population = int(args['ne_population'])
         top_limit = (population // 100) * int(args['ne_top_limit'][::len(args['ne_top_limit'])])
         model2 = ML_NE_2(generation, population, top_limit)
 
-    model1.model_train()
-    model2.model_train()
-    print("model1 time :", model1.get_train_time())
-    print("model2 time :", model2.get_train_time())
-    
-    return render(request, "main/model-result.html", model_selected)
+    # model1.model_train()
+    # model2.model_train()
+    # print("model1 time :", model1.get_train_time())
+    # print("model2 time :", model2.get_train_time())
+    return render(request, "main/model-result.html", args)
+
 
 def intro_view(request): # 시작 화면에서 'about'을 누를 경우 넘어가는 화면. 우리 프로젝트, 팀 정보에 대해서 간략히 적어놓으면 좋을 듯함.
     return render(request, "main/intro.html")
