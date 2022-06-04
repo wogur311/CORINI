@@ -4,6 +4,13 @@
     align-items: center;
 }
 
+body {
+    background-image: url("background_ml.jpg");
+    background-repeat: no-repeat;
+    background-size: 1500px 800px;
+    color: white;
+}
+
 .model-page > form {
     display: flex;
     flex-direction: column;
@@ -28,6 +35,3 @@
     height: 250px;
     margin-top: 50px;
 }
-
-
-

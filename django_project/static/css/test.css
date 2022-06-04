@@ -3,11 +3,18 @@
     flex-direction: column;
     align-items: center;
     flex-wrap: nowrap;
+}
+
+body {
     background-image: url("background_ml.jpg");
+    background-repeat: no-repeat;
+    background-size: 1500px 800px;
 }
 
 #title {
     text-align: center;
+    color: white;
+    padding: 70px;
 }
 .to-diff-buttons-box {
     display: flex;
@@ -21,5 +28,5 @@
     color: #0000C0;
     text-align: center;
     border-radius: 10px;
-    margin: 5px;
+    margin: 10px;
 }
