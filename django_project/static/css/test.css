@@ -3,6 +3,7 @@
     flex-direction: column;
     align-items: center;
     flex-wrap: nowrap;
+    background-image: url("background_ml.jpg");
 }
 
 #title {
