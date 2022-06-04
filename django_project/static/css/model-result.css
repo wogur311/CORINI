@@ -1,0 +1,33 @@
+.model-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.model-page > form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.models {
+    display: flex;
+    flex-direction: row;
+    justify-items: flex-start;
+    align-items: flex-start;
+}
+
+
+.model-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    align-items: center;
+    width: 400px;
+    height: 250px;
+    margin-top: 50px;
+}
+
+
+
