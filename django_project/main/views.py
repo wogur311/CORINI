@@ -3,6 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from cartpole_Q import *
 from cartpole_NE_2 import *
+import random
 
 # model-select 에서 post로 받은 값들을 model-selected에 넣어준뒤
 # model-test 에서는 각각의 모델에 맞는 설정값을 입력할 수 있다.
@@ -40,9 +41,67 @@ def model_test_view(request): # 3. 선택된 모델에 넣어줄 변수들을 �
         args = request.POST.copy() # 그 값을 arg에 저장하고,
         args['model1_type'] = model_selected['model1_type']
         args['model2_type'] = model_selected['model2_type']
-        return redirect('model_result_view')
-        # return render(request, 'main/model-result.html', arg) # model-result 화면으로 넘어갈 것.
+        return redirect('train_waiting_view')
+
     return render(request, "main/model-test.html", model_selected) # 그게 아니면 선택 화면을 보여줄 것.
+
+def train_waiting_view(request):
+    time = waiting_time() * 1000
+    print(time)
+    return render(request, "main/model-waiting.html", {waiting_time :time} )
+
+def waiting_time():
+    global args
+    q_episode = int(args['q_number_of_episode'])
+    ne_generation = int(args['ne_generation'])
+    ne_population = int(args['ne_population'])
+    ne_top_limit = (ne_population // 100) * int(args['ne_top_limit'][::len(args['ne_top_limit'])])
+
+    waiting_time_q = q_time(q_episode)
+    waiting_time_ne = ne_time(ne_generation, ne_population, ne_top_limit)
+
+    time = max(waiting_time_q, waiting_time_ne)
+    return time
+
+def q_time(episode):
+    if episode <= 100 :
+        return 20 + random.randrange(0, 10) + random.random()
+
+    if episode <= 1000 :
+        return 60 + random.randrange(0, 10) + random.random()
+
+    if episode <= 10000 :
+        return 3000 + random.randrange(0, 10) + random.random()
+
+def ne_time(generation, population, top_limit):
+    if generation <= 50:
+        time =  20 + random.randrange(0, 10) + random.random()
+    elif generation > 50 and generation <= 100:
+        time = 60
+    elif generation > 100 and generation <= 1000:
+        time = 3000
+    else:
+        time = 5000
+
+    if population <= 100:
+        time += 10 + random.randrange(0, 10)
+    elif population > 100 and population <= 300:
+        time += 30 + random.randrange(0, 10)
+    elif population > 300 and population <= 500:
+        time += 60 + random.randrange(0, 10)
+    else:
+        time += 100 + random.randrange(0, 10)
+
+    if top_limit <= 5:
+        time += random.random()
+    elif top_limit > 5 and top_limit <= 20:
+        time += 5 + random.random()
+    elif top_limit > 20 and top_limit <= 30:
+        time += 10 + random.random()
+    else:
+        time += 30 + random.random()
+
+    return time
 
 def model_result_view(request): # 모델 선택 후 여기에서 머신러닝 모델 생성, 훈련을 함. 훈련이 끝나면 결과를 render 해줄 것.
     global args
@@ -70,10 +129,6 @@ def model_result_view(request): # 모델 선택 후 여기에서 머신러닝 �
         top_limit = (population // 100) * int(args['ne_top_limit'][::len(args['ne_top_limit'])])
         model2 = ML_NE_2(generation, population, top_limit)
 
-    # model1.model_train()
-    # model2.model_train()
-    # print("model1 time :", model1.get_train_time())
-    # print("model2 time :", model2.get_train_time())
     return render(request, "main/model-result.html", args)
 
 
