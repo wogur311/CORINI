@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Model Tester - AI MODEL TESTER</title>
+    <link rel="stylesheet" href="{% static 'css/model-test.css' %}">
+</head>
+<body>
+    <div class="model-page">
+        <div class="menu">
+            <h2>AI MODEL TESTER</h2>
+        </div>
+
+        <div class="models">
+            <!-- 1st model -->
+            <div class="model-box" id="model-1"></div>
+
+            <div class="model-box" id="model-2"></div>
+
+            <h1> waiting !! view @@ </h1>
+
+            <script>
+                // var time = parseInt({{ waiting_time }});
+
+                function sleep(ms) {
+                  return new Promise((r) => setTimeout(r, ms));
+                }
+                var time = 60 * 1000
+                function test() { //결과창으로 리다이렉트
+                  console.log('waiting'); // 60초 뒤에
+                  sleep(time).then(() => window.location.replace('result'));
+                }
+
+                test()
+            </script>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
