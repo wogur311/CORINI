@@ -13,7 +13,7 @@ import random
 
 # model-selecet에서 선택된 모델로 업데이트됨
 model_selected = {'model1_type':'Q-learning',
-                  'model2_type': 'Neuroevolution'}
+                  'model2_type':'Neuroevolution'}
 
 #  <QueryDict: {'q_number_of_episode': ['100'], 'q_learning_rate': ['0.7'],
 #  'ne_generation': ['500'], 'ne_population': ['100'], 'ne_top_limit': ['5%'],
@@ -38,9 +38,14 @@ def model_test_view(request): # 3. 선택된 모델에 넣어줄 변수들을 �
     global model_selected, args
     # 문제 : 같은 모델을 선택할 경우, 딕셔너리로 되어 있기 때문에 변수값 두 개가 모두 같이 저장됨. -> 일단 나중에 하자.
     if request.POST: # form 값을 post로 받으면, == train button pressed
-        args = request.POST.copy() # 그 값을 arg에 저장하고,
+        args['q_number_of_episode'] = request.POST['q_number_of_episode']
+        args['q_learning_rate'] = request.POST['q_learning_rate']
+        args['ne_generation'] = request.POST['ne_generation']
+        args['ne_population'] = request.POST['ne_population']
+        args['ne_top_limit'] = request.POST['ne_top_limit']
         args['model1_type'] = model_selected['model1_type']
         args['model2_type'] = model_selected['model2_type']
+
         return redirect('train_waiting_view')
 
     return render(request, "main/model-test.html", model_selected) # 그게 아니면 선택 화면을 보여줄 것.
@@ -59,6 +64,9 @@ def waiting_time():
 
     waiting_time_q = q_time(q_episode)
     waiting_time_ne = ne_time(ne_generation, ne_population, ne_top_limit)
+
+    args['waiting_time_q'] = waiting_time_q
+    args['waiting_time_ne'] = waiting_time_ne
 
     time = max(waiting_time_q, waiting_time_ne)
     return time
