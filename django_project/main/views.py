@@ -48,7 +48,7 @@ def model_test_view(request): # 3. 선택된 모델에 넣어줄 변수들을 �
 def train_waiting_view(request):
     time = waiting_time() * 1000
     print(time)
-    return render(request, "main/model-waiting.html", {waiting_time :time} )
+    return render(request, "main/model-waiting.html", {'waiting_time' :time} )
 
 def waiting_time():
     global args
