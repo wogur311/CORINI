@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <title>Model Tester - AI MODEL TESTER</title>
     <link rel="stylesheet" href="{% static 'css/model-test.css' %}">
+    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+
 </head>
 <body>
     <div class="model-page">
@@ -36,9 +39,16 @@
                     {% endif %}
 
                 </div>
+        </div>
 
-                {% include "main/index.html" %}
+        <div class="result-box">
+            {% include "main/index.html" %}
 
+            <div class="pyscript-box">
+                <py-script>
+                    print("py-script")
+                </py-script>
+            </div>
         </div>
 
     </div>
