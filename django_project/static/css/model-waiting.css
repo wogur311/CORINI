@@ -1,0 +1,19 @@
+.model-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+body {
+    background-image: url("background_ml.jpg");
+    background-repeat: no-repeat;
+    background-size: 1500px 800px;
+    color: white;
+}
+
+.models {
+    display: flex;
+    flex-direction: row;
+    justify-items: center;
+    align-items: center;
+}
