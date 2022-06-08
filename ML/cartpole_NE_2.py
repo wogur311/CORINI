@@ -17,6 +17,7 @@ class ML_NE_2:
         self.start_time = None # 훈련 시작 시간
         self.end_time = None # 훈련 종료 시간
         self.rewards_of_generation = [] # 제너레이션마다 엘리트 집단의 평균을 저장
+        self.mean_rewards_of_generation_pop = [] #세대 마다 모든 인구의 리워드의 평균 저장
 
         torch.set_grad_enabled(False)
 
@@ -51,7 +52,7 @@ class ML_NE_2:
 
     # 기존의 인자인 'max_episode_length'는 최대 스텝은 기본으로 200으로 설정할 것이므로 삭제함.
     # 필요할 경우엔 ML_NE2의 self.step 값을 사용.
-    def evaluate_agent(self, agent, episodes=1, max_step_per_epi=200):
+    def evaluate_agent(self, agent, episodes=15, max_step_per_epi=200):
         '''Run an agent for a given number episodes and get the rewards'''
         # 한 에이전트 당 한 번의 시뮬레이션을 하는 게 아니라 인자로 받은 episodes수만큼 함.
         # 그 평균을 가지고 한 에이전트의 성능 평가가 이루어짐
@@ -128,6 +129,7 @@ class ML_NE_2:
             # Evaluate the population
             pop_fitness = self.evaluate_population(population, episodes, max_step_per_epi)
             mean_pop_reward = np.array(pop_fitness).mean()
+            self.mean_rewards_of_generation_pop.append(mean_pop_reward)
 
             # Rank the agents in descending order
             topK_idx = np.argsort(pop_fitness)[::-1][:topK]
@@ -218,6 +220,9 @@ class ML_NE_2:
 
     def get_train_rewards(self) -> list:
         return self.rewards_of_generation
+
+    def get_train_rewards_whole(self) -> list:
+        return self.mean_rewards_of_generation_pop
 
     def is_done(self):
         """
