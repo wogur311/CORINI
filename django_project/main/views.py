@@ -75,23 +75,28 @@ def q_time(episode):
     if episode <= 100 :
         return 1 + random.randrange(0, 10) + random.random()
 
+    if episode <= 500 :
+        return 5 + random.randrange(0, 10) + random.random()
+
     if episode <= 1000 :
         return 70 + random.randrange(0, 10) + random.random()
 
     if episode <= 10000 :
-        return 300 + random.randrange(0, 10) + random.random()
+        return 106 + random.randrange(0, 10) + random.random()
     else:
-        return 500 + random.randrange(0, 10) + random.random()
+        return 200 + random.randrange(0, 10) + random.random()
 
 def ne_time(generation, population, top_limit):
     if generation <= 50:
         time =  50 + random.randrange(0, 10) + random.random()
     elif generation > 50 and generation <= 100:
         time = 150
-    elif generation > 100 and generation <= 1000:
-        time = 1500
+    elif generation > 100 and generation <= 500:
+        time = 800
+    elif generation > 500 and generation <= 1000:
+        time = 1000
     else:
-        time = 2000
+        time = 1500
 
     if population <= 100:
         time += 10 + random.randrange(0, 10)
