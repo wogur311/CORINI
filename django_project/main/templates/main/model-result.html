@@ -4,21 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Model Tester - AI MODEL TESTER</title>
-     <link rel="stylesheet" href="{% static 'css/model-test.css' %}">
+    <link rel="stylesheet" href="{% static 'css/model-result.css' %}">
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+
 </head>
 <body>
     <div class="model-page">
         <div class="menu">
-            <h2>AI MODEL TESTER(DEMO)</h2>
+            <h2>AI MODEL TESTER</h2>
         </div>
             <div class="models">
                 <!-- 1st model -->
                 <div class="model-box" id="model-1">
-                    <label>Model settings</label>
                     {% if model1_type %}
                     <h3>{{ model1_type }}</h3>
                         {% if 'Q-learning' in model1_type %}
-                            {% include "main/index.html" %}
+                            {% include "main/Q-learning-result-page.html" %}
                         {% else %}
                             {% include "main/Neuroevolution-result-page.html" %}
                         {% endif %}
@@ -27,22 +31,85 @@
                 </div>
 
                 <div class="model-box" id="model-2">
-                    <label>Model settings</label>
                     {% if model2_type %}
                     <h3>{{ model2_type }}</h3>
                         {% if 'Q-learning' in model2_type %}
                             {% include "main/Q-learning-result-page.html" %}
                         {% else %}
-                            {% include "main/index.html" %}
+                            {% include "main/Neuroevolution-result-page.html" %}
                         {% endif %}
                     {% endif %}
 
                 </div>
+        </div>
 
+        <div class="result-box">
+            {% include "main/index.html" %}
 
+            <div>
+                <h3>Train Time</h3>
+                <div>The time it took to reach 200 rewards.</div>
+                <table class="train_time_table" border="1" cellpadding="10px">
+                    <tr>
+                        <td>Q-learning</td>
+                        <td>{{ waiting_time_q }}</td>
+                    </tr>
+                    <tr>
+                        <td>Neuroevolution</td>
+                        <td>{{ waiting_time_ne }}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div>
+                <h3>Rewards Table</h3>
+                <div>All rewards during training AI.</div>
+                <script>
+                    const rowCnt = 3;
+                    const columnCnt = n;
+
+                    document.write('<table class="train_rewards_table" border="1" cellpadding="5px">');
+                    for (let i = 0; i < rowCnt; i++) {
+                        document.write('<tr>');
+                        for (let j = 0; j < columnCnt; j++)  {
+                            document.write('<td>');
+                            if (i == 0 && j == 0) {
+                                document.write("ML");
+                            } else if (i == 1 && j == 0) {
+                                document.write("Q-learning");
+                            } else if (i == 2 && j == 0) {
+                                document.write("Neuroevolution");
+                            } else if (i == 0 && j > 0) {
+                                document.write(j);
+                            } else if (i == 1 && j > 0) {
+                                document.write(q_data[j-1]);
+                            } else if (i == 2 && j > 0) {
+                                document.write(ne_data_pop[j-1]);
+                            }
+                            document.write('</td>');
+                        }
+                        document.write('</tr>')
+                    }
+                    document.write('</table>');
+                </script>
+            </div>
+
+            <div>
+                <script>
+
+                    var time_q = "{{ waiting_time_q }}";
+                    var time_ne = "{{ waiting_time_ne }}";
+
+                </script>
+            </div>
         </div>
 
     </div>
-
 </body>
+<footer>
+    <br>
+    <div>
+        CORINI - AI model test by Cartpole mission
+    </div>
+</footer>
 </html>

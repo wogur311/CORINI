@@ -21,7 +21,8 @@ urlpatterns = [
     path('', main_views.index, name="index"),
     path('model-select/', main_views.model_select_view, name="model_select_view"),
     path('model-test/', main_views.model_test_view, name="model_test_view"),
-    path('model-result/', main_views.model_result_view, name="model_result_view"),
+    path('model-waiting/', main_views.train_waiting_view, name="train_waiting_view"),
+    path('model-waiting/result/', main_views.model_result_view, name="model_result_view"),
     path('intro/', main_views.intro_view, name='intro_view'),
     path('admin/', admin.site.urls),
 ]
